@@ -76,6 +76,17 @@
 
 ---
 
+### Confluence — Auto-Publish SRE Reports
+
+> Automatically publish bi-weekly SRE reports to Confluence space: https://telus-cio.atlassian.net/wiki/spaces/CDS/pages/4823482607
+
+#### Goals
+- [ ] 🟡 Med: Explore using n8n as middleware to publish reports to Confluence (blocked: complete Dynatrace reporting first)
+- [ ] 🟢 Low: Check if existing Bitbucket OAuth app can be extended with Confluence scopes (`read:confluence-content.all`, `write:confluence-content`) — requires admin
+- [ ] 🟢 Low: In the interim, generate report locally and upload manually to Confluence
+
+---
+
 ## Backlog
 - [ ] 🟡 Med: Add README with project overview
 - [ ] 🟢 Low: Explore Claude Code features
