@@ -40,12 +40,13 @@
 > Bi-weekly reporting on alerts per team, grouped by Service, with endpoint tracking and duration.
 
 #### Goals
-- [ ] 🔴 High: Improve readability of Dynatrace alerts
-- [ ] 🔴 High: Build bi-weekly alert report (per team, grouped by Service)
-- [ ] 🟡 Med: Add duration tracking per alert
-- [ ] 🟡 Med: Add implicated endpoint tracking per alert
+- [x] 🔴 High: Improve readability of Dynatrace alerts
+- [x] 🔴 High: Build bi-weekly alert report (per team, grouped by Service)
+- [x] 🟡 Med: Add duration tracking per alert
+- [x] 🟡 Med: Add implicated endpoint tracking per alert
+- [x] 🟡 Med: Ask Claude to help build out the Dynatrace alert report (API queries, grouping by service, endpoint tracking, bi-weekly format)
 - [ ] 🟢 Low: Automate report generation / scheduling
-- [ ] 🟡 Med: Ask Claude to help build out the Dynatrace alert report (API queries, grouping by service, endpoint tracking, bi-weekly format)
+- [ ] 🟡 Med: Investigate high alert count for Agent & Product Experience (1,534 alerts — hokages profile may be too broad)
 
 #### Bi-Weekly Alert Report Template
 
