@@ -47,3 +47,6 @@ logs/
 *.tmp
 *.bak
 *.swp
+
+# Generated reports (contain real data)
+sre_report.md
