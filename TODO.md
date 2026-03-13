@@ -47,6 +47,14 @@
 - [x] 🟡 Med: Ask Claude to help build out the Dynatrace alert report (API queries, grouping by service, endpoint tracking, bi-weekly format)
 - [ ] 🟢 Low: Automate report generation / scheduling
 - [ ] 🟡 Med: Investigate high alert count for Agent & Product Experience (1,534 alerts — hokages profile may be too broad)
+- [ ] 🔴 High: Expand alert detail in report — add metric type + affected endpoint per alert
+  - Report structure: **Service → Metric Type (response time / failure rate / availability / timeout) → Affected Endpoint**
+  - Goal: surface common and recurring alerts across teams
+  - Ask Claude to cross-reference alert history and identify patterns
+  - Ask Claude to generate recommendations per recurring alert:
+    - Code-level fix (e.g. retry logic, timeout tuning, circuit breaker)
+    - Alerting sensitivity fix (e.g. threshold too low, alert profile too broad)
+    - Escalation recommendation (e.g. upstream team dependency issue)
 
 #### Bi-Weekly Alert Report Template
 
