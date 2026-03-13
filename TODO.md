@@ -87,6 +87,36 @@
 
 ---
 
+## Support Excellence
+
+> Evolving the day-to-day support role — defining best practices, routines, and what great support looks like in practice. _(Currently brainstorming)_
+
+### Goals
+- [ ] 🔴 High: Define a clear set of support best practices
+- [ ] 🔴 High: Build out a "Day in the Life of Support" — regular daily/weekly activities
+- [ ] 🟡 Med: Ask Claude to help craft and refine the best practices list
+- [ ] 🟡 Med: Document escalation paths and response standards
+- [ ] 🟢 Low: Publish finalized Support Excellence guide to Confluence
+
+### Best Practices _(brainstorm — add as ideas come)_
+<!-- What does great support look like? Add ideas here -->
+- [ ] _(e.g. triage SLA — acknowledge within X mins)_
+- [ ] _(e.g. always document resolution steps in ticket)_
+- [ ] _(e.g. proactive communication to stakeholders during incidents)_
+
+### Day in the Life — Support Role
+> What does a regular support day/week look like?
+
+| Cadence | Activity | Notes |
+|---------|----------|-------|
+| Daily | _(e.g. review open tickets)_ | |
+| Daily | _(e.g. check Dynatrace alerts)_ | |
+| Weekly | _(e.g. team standup / sync)_ | |
+| Bi-weekly | _(e.g. SRE alert report)_ | |
+| Monthly | _(e.g. review trends / recurring issues)_ | |
+
+---
+
 ## Backlog
 - [ ] 🟡 Med: Add README with project overview
 - [ ] 🟢 Low: Explore Claude Code features
