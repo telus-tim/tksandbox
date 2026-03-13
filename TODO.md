@@ -39,6 +39,7 @@
 - [ ] 🟡 Med: Add duration tracking per alert
 - [ ] 🟡 Med: Add implicated endpoint tracking per alert
 - [ ] 🟢 Low: Automate report generation / scheduling
+- [ ] 🟡 Med: Ask Claude to help build out the Dynatrace alert report (API queries, grouping by service, endpoint tracking, bi-weekly format)
 
 ### Bi-Weekly Alert Report Template
 
