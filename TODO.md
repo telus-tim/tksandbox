@@ -29,11 +29,17 @@
 
 ---
 
-## Dynatrace — Alert Readability & Reporting
+## SRE Reporting
+
+> Bi-weekly reporting across observability and incident tools, grouped by team and service.
+
+---
+
+### Dynatrace — Alert Readability & Reporting
 
 > Bi-weekly reporting on alerts per team, grouped by Service, with endpoint tracking and duration.
 
-### Goals
+#### Goals
 - [ ] 🔴 High: Improve readability of Dynatrace alerts
 - [ ] 🔴 High: Build bi-weekly alert report (per team, grouped by Service)
 - [ ] 🟡 Med: Add duration tracking per alert
@@ -41,7 +47,7 @@
 - [ ] 🟢 Low: Automate report generation / scheduling
 - [ ] 🟡 Med: Ask Claude to help build out the Dynatrace alert report (API queries, grouping by service, endpoint tracking, bi-weekly format)
 
-### Bi-Weekly Alert Report Template
+#### Bi-Weekly Alert Report Template
 
 | Team | Service | Endpoint | Alert Name | Duration | Occurrences | Status |
 |------|---------|----------|------------|:--------:|:-----------:|--------|
@@ -50,6 +56,23 @@
 **Cadence:** Bi-weekly &nbsp;|&nbsp; **Next Report:** _(set date)_
 
 **Status Key:** ✅ Resolved · 🔄 Ongoing · ⚠️ Intermittent · ❌ Critical
+
+---
+
+### PagerDuty — Incident Reporting
+
+> Bi-weekly incident reporting per team/service, cross-referenced with Dynatrace alerts.
+
+#### Goals
+- [ ] 🔴 High: Pull incident data via PagerDuty API (grouped by service/team)
+- [ ] 🟡 Med: Track incident response times and escalations
+- [ ] 🟡 Med: Cross-reference PagerDuty incidents with Dynatrace alerts
+- [ ] 🟢 Low: Combine PagerDuty + Dynatrace into unified SRE bi-weekly report
+- [ ] 🟡 Med: Ask Claude to help build PagerDuty reporting scripts
+
+#### Prerequisites
+- [ ] Obtain PagerDuty API key
+- [ ] Confirm PagerDuty subdomain
 
 ---
 
