@@ -29,6 +29,29 @@
 
 ---
 
+## Dynatrace — Alert Readability & Reporting
+
+> Bi-weekly reporting on alerts per team, grouped by Service, with endpoint tracking and duration.
+
+### Goals
+- [ ] 🔴 High: Improve readability of Dynatrace alerts
+- [ ] 🔴 High: Build bi-weekly alert report (per team, grouped by Service)
+- [ ] 🟡 Med: Add duration tracking per alert
+- [ ] 🟡 Med: Add implicated endpoint tracking per alert
+- [ ] 🟢 Low: Automate report generation / scheduling
+
+### Bi-Weekly Alert Report Template
+
+| Team | Service | Endpoint | Alert Name | Duration | Occurrences | Status |
+|------|---------|----------|------------|:--------:|:-----------:|--------|
+| _(team)_ | _(service)_ | _(endpoint)_ | _(alert)_ | 0m | 0 | ✅ Resolved |
+
+**Cadence:** Bi-weekly &nbsp;|&nbsp; **Next Report:** _(set date)_
+
+**Status Key:** ✅ Resolved · 🔄 Ongoing · ⚠️ Intermittent · ❌ Critical
+
+---
+
 ## Backlog
 - [ ] 🟡 Med: Add README with project overview
 - [ ] 🟢 Low: Explore Claude Code features
