@@ -48,5 +48,6 @@ logs/
 *.bak
 *.swp
 
-# Generated reports (contain real data)
+# Generated reports and cache (contain real data)
 sre_report.md
+.dt_cache.json
