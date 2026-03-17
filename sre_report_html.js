@@ -134,19 +134,60 @@ const teamSections = teamData.map(({ team, problems, topServices, sevCounts }) =
   const sevColors  = sevLabels.map(k => SEV_COLORS[k] || '#aaa');
   const chartId    = team.name.replace(/\s+/g, '_');
 
+  const sev = { ERROR:'🔴', AVAILABILITY:'🟠', PERFORMANCE:'🟡', RESOURCE_CONTENTION:'🟣' };
+
   const serviceRows = topServices.map(([svc, probs]) => {
-    const open = probs.filter(p => p.status === 'OPEN').length;
-    const avgDur = Math.round(
+    const open   = probs.filter(p => p.status === 'OPEN').length;
+    const avgDurMin = Math.round(
       probs.reduce((s, p) => s + (p.endTime === -1 ? now - p.startTime : p.endTime - p.startTime), 0)
       / probs.length / 60000
     );
-    const topSev = ['ERROR','AVAILABILITY','PERFORMANCE','RESOURCE_CONTENTION'].find(s => probs.some(p => p.severityLevel === s)) || 'UNKNOWN';
+    const avgDur  = avgDurMin >= 60 ? `${Math.floor(avgDurMin/60)}h ${avgDurMin%60}m` : `${avgDurMin}m`;
+    const topSev  = ['ERROR','AVAILABILITY','PERFORMANCE','RESOURCE_CONTENTION'].find(s => probs.some(p => p.severityLevel === s)) || 'UNKNOWN';
     const sevColor = SEV_COLORS[topSev] || '#aaa';
-    return `<tr>
-      <td>${svc}</td>
+
+    // Build endpoint rows — all entities beyond the primary service
+    const alertRows = probs.sort((a, b) => b.startTime - a.startTime).map(p => {
+      const allEntities = [...(p.affectedEntities || []), ...(p.impactedEntities || [])];
+      const endpoints   = allEntities.filter(e => e.name !== svc).map(e => e.name);
+      const endpointStr = endpoints.length ? endpoints.join(', ') : p.rootCauseEntity?.name || '—';
+      const durMs  = p.endTime === -1 ? now - p.startTime : p.endTime - p.startTime;
+      const durMin = Math.round(durMs / 60000);
+      const durStr = durMin >= 60 ? `${Math.floor(durMin/60)}h ${durMin%60}m` : `${durMin}m`;
+      const start  = new Date(p.startTime).toLocaleString('en-CA', { dateStyle: 'short', timeStyle: 'short' });
+      const status = p.status === 'OPEN'
+        ? '<span style="color:#e15759;font-weight:600">● Open</span>'
+        : '<span style="color:#59a14f">✓ Resolved</span>';
+      return `<tr class="endpoint-row">
+        <td>${sev[p.severityLevel] || '⚪'} ${p.title}</td>
+        <td style="color:#636e72;font-size:0.78rem;max-width:220px;word-break:break-word">${endpointStr}</td>
+        <td class="num" style="white-space:nowrap">${start}</td>
+        <td class="num">${durStr}</td>
+        <td>${status}</td>
+      </tr>`;
+    }).join('');
+
+    return `<tr class="svc-row">
+      <td>
+        <details>
+          <summary class="svc-summary">${svc}</summary>
+          <div class="endpoint-wrap">
+            <table class="endpoint-table">
+              <thead><tr>
+                <th>Alert</th>
+                <th>Endpoint / Entity</th>
+                <th>Started</th>
+                <th>Duration</th>
+                <th>Status</th>
+              </tr></thead>
+              <tbody>${alertRows}</tbody>
+            </table>
+          </div>
+        </details>
+      </td>
       <td class="num">${probs.length}</td>
       <td class="num open">${open}</td>
-      <td class="num">${avgDur}m avg</td>
+      <td class="num">${avgDur}</td>
       <td><span class="badge" style="background:${sevColor}">${topSev}</span></td>
     </tr>`;
   }).join('');
@@ -216,6 +257,17 @@ const html = `<!DOCTYPE html>
     .team-grid { display: grid; grid-template-columns: 260px 1fr; gap: 24px; align-items: start; }
     .chart-box h3, .table-box h3 { margin: 0 0 12px; font-size: 0.9rem; color: #636e72; text-transform: uppercase; letter-spacing: .4px; }
     .generated { text-align: center; color: #b2bec3; font-size: 0.8rem; padding: 24px 0; }
+    details summary { cursor: pointer; list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    .svc-summary { display: flex; align-items: center; gap: 6px; }
+    .svc-summary::before { content: '▶'; font-size: 0.65rem; color: #b2bec3; transition: transform .2s; flex-shrink: 0; }
+    details[open] .svc-summary::before { transform: rotate(90deg); }
+    .endpoint-wrap { margin: 10px 0 6px 0; background: #f8f9fb; border-radius: 8px; overflow: hidden; }
+    .endpoint-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .endpoint-table th { background: #eef0f3; padding: 6px 10px; text-align: left; color: #636e72; font-size: 0.72rem; text-transform: uppercase; letter-spacing: .3px; }
+    .endpoint-table td { padding: 7px 10px; border-bottom: 1px solid #eef0f3; vertical-align: top; }
+    .endpoint-table tr:last-child td { border-bottom: none; }
+    .endpoint-row:hover td { background: #f0f4ff; }
     .tip { cursor: help; border-bottom: 1px dashed #b2bec3; position: relative; white-space: nowrap; }
     .tip::after {
       content: attr(data-tip);
