@@ -50,4 +50,5 @@ logs/
 
 # Generated reports and cache (contain real data)
 sre_report.md
+sre_report.html
 .dt_cache.json
