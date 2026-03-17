@@ -95,16 +95,36 @@ const timelineDatasets = teamData.map(({ team, dailyCounts }) => ({
   fill: false,
 }));
 
-const summaryRows = teamData.map(({ team, problems }) => {
-  const open     = problems.filter(p => p.status === 'OPEN').length;
-  const resolved = problems.filter(p => p.status === 'CLOSED').length;
-  const errorPct = Math.round((problems.filter(p => p.severityLevel === 'ERROR').length / (problems.length || 1)) * 100);
+const summaryRows = teamData.map(({ team, problems, byService, dailyCounts }) => {
+  const open      = problems.filter(p => p.status === 'OPEN').length;
+  const resolved  = problems.filter(p => p.status === 'CLOSED').length;
+  const errorPct  = Math.round((problems.filter(p => p.severityLevel === 'ERROR').length / (problems.length || 1)) * 100);
+
+  const avgDurMin = problems.length
+    ? Math.round(problems.reduce((s, p) => s + (p.endTime === -1 ? now - p.startTime : p.endTime - p.startTime), 0) / problems.length / 60000)
+    : 0;
+  const avgDur = avgDurMin >= 60 ? `${Math.floor(avgDurMin/60)}h ${avgDurMin%60}m` : `${avgDurMin}m`;
+
+  const recurringPct = problems.length
+    ? Math.round((Object.values(byService).filter(p => p.length > 1).reduce((s, p) => s + p.length, 0) / problems.length) * 100)
+    : 0;
+
+  const worstDay = Object.entries(dailyCounts).sort((a, b) => b[1] - a[1])[0];
+  const worstDayStr = worstDay ? `${worstDay[0]} (${worstDay[1]})` : '—';
+
+  const topSvc = Object.entries(byService).sort((a, b) => b[1].length - a[1].length)[0];
+  const topSvcStr = topSvc ? `${topSvc[0].slice(0, 28)}${topSvc[0].length > 28 ? '…' : ''} (${topSvc[1].length})` : '—';
+
   return `<tr>
     <td><span class="dot" style="background:${team.color}"></span>${team.name}</td>
     <td class="num">${problems.length}</td>
     <td class="num open">${open}</td>
     <td class="num resolved">${resolved}</td>
     <td class="num">${errorPct}%</td>
+    <td class="num">${avgDur}</td>
+    <td class="num">${recurringPct}%</td>
+    <td class="num">${worstDayStr}</td>
+    <td style="font-size:0.8rem;max-width:200px">${topSvcStr}</td>
   </tr>`;
 }).join('');
 
@@ -196,6 +216,16 @@ const html = `<!DOCTYPE html>
     .team-grid { display: grid; grid-template-columns: 260px 1fr; gap: 24px; align-items: start; }
     .chart-box h3, .table-box h3 { margin: 0 0 12px; font-size: 0.9rem; color: #636e72; text-transform: uppercase; letter-spacing: .4px; }
     .generated { text-align: center; color: #b2bec3; font-size: 0.8rem; padding: 24px 0; }
+    .tip { cursor: help; border-bottom: 1px dashed #b2bec3; position: relative; white-space: nowrap; }
+    .tip::after {
+      content: attr(data-tip);
+      position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
+      background: #2d3436; color: #fff; padding: 7px 11px; border-radius: 6px;
+      font-size: 0.78rem; font-weight: 400; white-space: normal; width: 220px;
+      text-align: left; line-height: 1.4; letter-spacing: 0;
+      opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 10;
+    }
+    .tip:hover::after { opacity: 1; }
     @media (max-width: 768px) {
       .summary-grid, .team-grid { grid-template-columns: 1fr; }
     }
@@ -216,7 +246,17 @@ const html = `<!DOCTYPE html>
       <div class="card">
         <h2>Summary</h2>
         <table>
-          <thead><tr><th>Team</th><th>Total</th><th>Open</th><th>Resolved</th><th>🔴 Error %</th></tr></thead>
+          <thead><tr>
+            <th>Team</th>
+            <th>Total</th>
+            <th>Open</th>
+            <th>Resolved</th>
+            <th><span class="tip" data-tip="% of alerts with ERROR severity — high values suggest service failures vs degradation">🔴 Error %</span></th>
+            <th><span class="tip" data-tip="Average duration per alert across the period — longer = more sustained issues">Avg Duration</span></th>
+            <th><span class="tip" data-tip="% of alerts that fired on a service that alerted more than once — high values indicate recurring / noisy alerts">Recurring %</span></th>
+            <th><span class="tip" data-tip="The single day with the highest alert count — useful for spotting incident clusters">Worst Day</span></th>
+            <th><span class="tip" data-tip="The service with the most alerts this period — the top offender for this team">Top Service</span></th>
+          </tr></thead>
           <tbody>${summaryRows}</tbody>
         </table>
       </div>
